@@ -1,0 +1,8 @@
+#ifndef __DATASET_PATH_H
+#define __DATASET_PATH_H
+#include <string>
+
+std::string dataset_path = std::string("${PROJECT_SOURCE_DIR}/../data");
+
+#endif
+
