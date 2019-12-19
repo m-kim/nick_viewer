@@ -2,7 +2,6 @@
 #include <QKeyEvent>
 #include <qapplication.h>
 #include <qtimer.h>
-#include <GL/glut.h>
 #include <cstdio>
 
 QtSculptorWidget::QtSculptorWidget( int timerInterval, QWidget *parent, QGLWidget *shareWidget ) : QGLWidget( parent, shareWidget )
@@ -17,7 +16,6 @@ QtSculptorWidget::QtSculptorWidget( int timerInterval, QWidget *parent, QGLWidge
 		}
 	frame=0;
 	timebase=0;
-    font = GLUT_BITMAP_8_BY_13;
 }
 
 void QtSculptorWidget::keyPressEvent( QKeyEvent *e )
@@ -44,24 +42,35 @@ QSize QtSculptorWidget::sizeHint() const
     return QSize(512, 512);
 }
 
-void QtSculptorWidget::drawFPS()
+void QtSculptorWidget::drawPNM()
 {
-	glColor3f(0.0f,1.0f,1.0f);
-	frame++;
-	timer=glutGet(GLUT_ELAPSED_TIME);
-	if (timer - timebase > 1000) {
-		sprintf(s,"FPS:%4.2f",frame*1000.0/(timer-timebase));
-		timebase = timer;
-		frame = 0;
-	}
+    glColor3f(0.0f,1.0f,1.0f);
 
 	setOrthographicProjection();
 	glPushMatrix();
 	glLoadIdentity();
-	renderBitmapString(30,35,(void *)font,s);
-	renderBitmapString(30,55,(void *)font,"Esc - Quit");
-	glPopMatrix();
-	resetPerspectiveProjection();
+
+
+    glRasterPos2f(0,0);
+
+    GLubyte *pixels = new GLubyte[512*512*3];
+    for (int i=0; i<512; i++){
+        for (int j=0; j<512; j++){
+            pixels[(i*512+j * 3)] = 0;
+            pixels[(i*512+j * 3)+1] = 0;
+            pixels[(i*512+j * 3)+1] = 0;
+        }
+    }
+    pixels[(256 * 512 + 256)*3] = 255;
+    pixels[(256 * 512 + 256)*3+1] = 255;
+    pixels[(256 * 512 + 256)*3+2] = 255;
+    glDrawPixels(512,512,GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    delete pixels;
+
+    glPopMatrix();
+    resetPerspectiveProjection();
+
 }
 
 void QtSculptorWidget::setOrthographicProjection() {
@@ -74,12 +83,8 @@ void QtSculptorWidget::setOrthographicProjection() {
 	// reset matrix
 	glLoadIdentity();
 	// set a 2D orthographic projection
-	gluOrtho2D(0, 512, 0, 512);
+    glOrtho(0, 512, 0, 512, -1,1);
 	// invert the y axis, down is positive
-	glScalef(1, -1, 1);
-	// mover the origin from the bottom left corner
-	// to the upper left corner
-	glTranslatef(0, -512, 0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -89,14 +94,4 @@ void QtSculptorWidget::resetPerspectiveProjection() {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void QtSculptorWidget::renderBitmapString(float x, float y, void *font,char *string)
-{
 
-  char *c;
-  // set position to start drawing fonts
-  glRasterPos2f(x, y);
-  // loop all the characters in the string
-  for (c=string; *c != '\0'; c++) {
-    glutBitmapCharacter(font, *c);
-  }
-}

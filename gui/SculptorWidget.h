@@ -1,18 +1,11 @@
 #ifndef SculptorWidget_H
 #define SculptorWidget_H
 #include <sstream>
-#include <RayCastRenderer.h>
-#include "MarchingCubes.h"
 
 #include "QtSculptorWidget.h"
-#include <TrackballCamera.h>
-#include <Light.h>
-#include <Shader.h>
-#include "drawbh.h"
 
 typedef char VOLUME_TYPE;
 
-class DriverBH;
 class SculptorWidget : public QtSculptorWidget
 {
 public:
@@ -32,7 +25,6 @@ public:
     void setVisibleLevel(int val);
     void setSpacingValue(int val);
     void setLeafVisible(int val);
-    DriverBH *drv;
 
 protected:
 	void initializeGL();
@@ -40,16 +32,9 @@ protected:
 	void paintGL();
 private:
     GLuint texvolume;
-    TrackballCamera cam;
-    RayCastRenderer<GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT, GL_REPEAT,
-					VOLUME_TYPE, GL_LUMINANCE,GL_LUMINANCE,GL_UNSIGNED_BYTE> *renderer;
-
-	Light light;
 
 	QColor background_color;
-    std::vector<VOLUME_TYPE> volume;
 	bool volume_render;
-    DrawBH drawbh;
 
 };
 #endif

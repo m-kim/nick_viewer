@@ -1,7 +1,6 @@
 #ifndef QTSCULPTORWidget_H
 #define QTSCULPTORWidget_H
 
-#include <GL/glew.h>
 #include <QtOpenGL/QGLWidget>
 #include <QImageWriter>
 #include <QFileDialog>
@@ -55,8 +54,7 @@ protected:
 	virtual void resizeGL( int width, int height ) = 0;
 	virtual void paintGL() = 0;
 	virtual void timeOut();
-	void drawFPS();
-	void renderBitmapString(float x, float y, void *font,char *string);
+    void drawPNM();
 	void resetPerspectiveProjection();
 	void setOrthographicProjection();
 protected slots:
@@ -64,7 +62,6 @@ protected slots:
 private:
 	QTimer *m_timer;
 	int frame,timer,timebase;
-	void* font;
 	char s[30];
 };
 

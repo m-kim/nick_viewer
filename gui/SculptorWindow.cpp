@@ -5,14 +5,11 @@
 #include <iostream>
 
 using namespace std;
-SculptorWindow::SculptorWindow(DriverBH *d)
+SculptorWindow::SculptorWindow()
 {
 	ui = new Ui::MainWindow();
 	ui->setupUi(this);
 	currentGlWidget = new SculptorWidget();
-    currentGlWidget->drv = d;
-	currentGlWidget->makeCurrent();
-	glewInit();
 	setCentralWidget(currentGlWidget);
     setWindowTitle(tr("Sculptor"));
 

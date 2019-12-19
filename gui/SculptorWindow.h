@@ -4,13 +4,13 @@
 #include <QMainWindow>
 #include "ui_mainwindow.h"
 class SculptorWidget;
-class DriverBH;
+
 class SculptorWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    SculptorWindow(DriverBH *d);
+    SculptorWindow();
     void keyPressEvent( QKeyEvent *e );
     void mousePressEvent(QMouseEvent *);
 	void mouseMoveEvent(QMouseEvent *);
